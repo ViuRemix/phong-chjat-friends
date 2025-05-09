@@ -7,9 +7,12 @@ import { ThemeProvider } from "@/components/theme-provider"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Chat Application",
+  title: "ViuChat",
   description: "A beautiful real-time chat application with authentication and group chat",
-    generator: 'v0.dev'
+  generator: 'v0.dev',
+  icons: {
+    icon: "/logo_viu.png", // icon favicon
+  },
 }
 
 // Function to initialize the application

@@ -10,6 +10,7 @@ import { ChatSettingsDialog } from "@/components/chat-settings-dialog"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 interface ChatHeaderProps {
+  className?: string
   chat: Chat
   onChatUpdated?: (chat: Chat) => void
 }

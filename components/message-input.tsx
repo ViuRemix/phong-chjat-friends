@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils"
 import { toast } from "@/hooks/use-toast"
 
 interface MessageInputProps {
+  className?: string
   chatId: string
   onMessageSent?: () => void
   chatTheme?: string
@@ -220,7 +221,7 @@ export function MessageInput({ chatId, onMessageSent, chatTheme = "default" }: M
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder="Type your message..."
-          className="min-h-[60px] max-h-[120px] bg-gray-800 border-gray-700 text-white resize-none"
+          className="min-h-[60px] max-h-[120px] bg-gray-800 border-gray-700 text-white resize-none chat-message-input-mobile"
           onKeyDown={(e) => {
             if (e.key === "Enter" && !e.shiftKey) {
               e.preventDefault()

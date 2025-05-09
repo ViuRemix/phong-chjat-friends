@@ -1,23 +1,34 @@
 import { NextResponse } from "next/server"
-import { getCurrentUser } from "@/lib/auth"
-import { generateId } from "@/lib/auth"
+import { v2 as cloudinary } from "cloudinary"
 
-// This is a mock implementation since we can't use actual file storage in this environment
+// cấu hình Cloudinary
+cloudinary.config({
+  cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+})
+
 export async function POST(request: Request) {
+  const formData = await request.formData()
+  const file = formData.get("file") as File
+
+  if (!file) {
+    return NextResponse.json({ error: "No file uploaded" }, { status: 400 })
+  }
+
+  const buffer = Buffer.from(await file.arrayBuffer())
+
   try {
-    const user = await getCurrentUser()
-    if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-    }
+    const uploadResult = await new Promise((resolve, reject) => {
+      cloudinary.uploader.upload_stream({ folder: "profile_avatars" }, (err, result) => {
+        if (err || !result) reject(err)
+        else resolve(result)
+      }).end(buffer)
+    })
 
-    // In a real implementation, you would use a service like Vercel Blob or AWS S3
-    // For now, we'll just return a mock URL
-    const fileId = generateId()
-    const mockUrl = `/api/files/${fileId}`
-
-    return NextResponse.json({ url: mockUrl })
-  } catch (error) {
-    console.error("Error uploading file:", error)
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+    return NextResponse.json({ url: (uploadResult as any).secure_url })
+  } catch (err) {
+    console.error("Upload error:", err)
+    return NextResponse.json({ error: "Upload failed" }, { status: 500 })
   }
 }

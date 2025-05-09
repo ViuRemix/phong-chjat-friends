@@ -16,9 +16,11 @@ import type { User } from "@/lib/auth"
 
 interface CreateChatDialogProps {
   onChatCreated: (chat: Chat) => void
+  triggerClassName?: string
+  triggerContent?: React.ReactNode
 }
 
-export function CreateChatDialog({ onChatCreated }: CreateChatDialogProps) {
+export function CreateChatDialog({ onChatCreated, triggerClassName, triggerContent }: CreateChatDialogProps) {
   const router = useRouter()
   const [open, setOpen] = useState(false)
   const [name, setName] = useState("")
@@ -111,9 +113,8 @@ export function CreateChatDialog({ onChatCreated }: CreateChatDialogProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white">
-          <MessageSquarePlus className="h-5 w-5 mr-2" />
-          New Chat
+        <Button className={triggerClassName || "w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white"}>
+          {triggerContent ?? <><MessageSquarePlus className="h-5 w-5 mr-2" />New Chat</>}
         </Button>
       </DialogTrigger>
       <DialogContent className="bg-gray-900 border-gray-800 text-white">

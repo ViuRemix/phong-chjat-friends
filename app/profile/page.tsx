@@ -68,49 +68,52 @@ export default function ProfilePage() {
     }
   }
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
 
     // Check file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
-      setError("File size must be less than 5MB")
-      return
+      setError("File size must be less than 5MB");
+      return;
     }
 
     // Check file type
     if (!file.type.startsWith("image/")) {
-      setError("File must be an image")
-      return
+      setError("File must be an image");
+      return;
     }
 
     try {
-      setIsSaving(true)
-      setError(null)
+      setIsSaving(true);
+      setError(null);
 
-      // Create form data
-      const formData = new FormData()
-      formData.append("file", file)
+      const formData = new FormData();
+      formData.append("file", file);
 
-      // Upload file
+      // Gửi yêu cầu đến API server-side để upload ảnh
       const response = await fetch("/api/upload", {
         method: "POST",
         body: formData,
-      })
+      });
 
       if (!response.ok) {
-        throw new Error("Failed to upload file")
+        const errorDetails = await response.json();
+        console.error("Cloudinary error details:", errorDetails);
+        throw new Error("Failed to upload to Cloudinary");
       }
 
-      const data = await response.json()
-      setAvatar(data.url)
+      const data = await response.json();
+      setAvatar(data.url); // Set URL ảnh
     } catch (error) {
-      console.error("Error uploading file:", error)
-      setError("Failed to upload file")
+      console.error("Error uploading to Cloudinary:", error);
+      setError("Failed to upload image");
     } finally {
-      setIsSaving(false)
+      setIsSaving(false);
     }
-  }
+  };
+
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

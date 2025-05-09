@@ -290,29 +290,40 @@ export default function ChatPage({ params }: { params: { id: string } }) {
 
   return (
     <>
-      <ChatHeader chat={chat} onChatUpdated={(updatedChat) => setChat(updatedChat)} />
+      <ChatHeader
+        chat={chat}
+        onChatUpdated={(updatedChat) => setChat(updatedChat)}
+        className="block lg:hidden"
+      />
 
       {fetchError && (
-        <Alert variant="destructive" className="m-2 bg-red-900/20 border-red-800">
+        <Alert variant="destructive" className="m-2 bg-red-900/20 border-red-800 block lg:hidden">
           <AlertCircle className="h-4 w-4" />
           <AlertDescription>{fetchError}</AlertDescription>
         </Alert>
       )}
 
       {usePolling && (
-        <div className="bg-yellow-900/20 border border-yellow-800 text-yellow-300 px-4 py-2 text-sm text-center">
+        <div className="bg-yellow-900/20 border border-yellow-800 text-yellow-300 px-4 py-2 text-sm text-center block lg:hidden">
           Using polling mode. Real-time updates may be delayed.
         </div>
       )}
 
       <MessageList
+        className="block lg:hidden w-full"
         messages={messages}
         currentUserId={user.id}
         chatTheme={chat.theme}
         onMessageRead={handleMessageRead}
         users={users}
       />
-      <MessageInput chatId={params.id} onMessageSent={fetchMessages} chatTheme={chat.theme} />
+
+      <MessageInput
+        chatId={params.id}
+        onMessageSent={fetchMessages}
+        chatTheme={chat.theme}
+        className="block lg:hidden"
+      />
     </>
   )
 }

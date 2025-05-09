@@ -46,7 +46,8 @@ export default function ChatHomePage() {
 
   return (
     <div className="flex-1 flex flex-col items-center justify-center p-6 text-center text-gray-400">
-      <MessageCircle className="h-16 w-16 mb-4 text-gray-500" />
+      {/* Ẩn trên mobile, hiện trên desktop */}
+      <MessageCircle className="hidden lg:block h-16 w-16 mb-4 text-gray-500" />
       <h2 className="text-2xl font-bold text-white mb-2">Welcome, {user?.username}!</h2>
       <p className="max-w-md mb-4">Select a chat from the sidebar or create a new one to start messaging.</p>
       <p className="text-sm text-gray-500">
@@ -54,4 +55,5 @@ export default function ChatHomePage() {
       </p>
     </div>
   )
+
 }
